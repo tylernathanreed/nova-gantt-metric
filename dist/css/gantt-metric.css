@@ -1,0 +1,70 @@
+.ct-grantt-chart .ct-series-a .ct-bar,
+.ct-grantt-chart .ct-series-a .ct-line,
+.ct-grantt-chart .ct-series-a .ct-point {
+  stroke: #F5573B !important;
+  stroke-width: 6px;
+}
+
+.ct-grantt-chart .ct-series-b .ct-bar,
+.ct-grantt-chart .ct-series-b .ct-line,
+.ct-grantt-chart .ct-series-b .ct-point {
+  stroke: #F99037 !important;
+  stroke-width: 6px;
+}
+
+.ct-grantt-chart .ct-series-c .ct-bar,
+.ct-grantt-chart .ct-series-c .ct-line,
+.ct-grantt-chart .ct-series-c .ct-point {
+  stroke: #F2CB22 !important;
+  stroke-width: 6px;
+}
+
+.ct-grantt-chart .ct-series-d .ct-bar,
+.ct-grantt-chart .ct-series-d .ct-line,
+.ct-grantt-chart .ct-series-d .ct-point {
+  stroke: #8FC15D !important;
+  stroke-width: 6px;
+}
+
+.ct-grantt-chart .ct-series-e .ct-bar,
+.ct-grantt-chart .ct-series-e .ct-line,
+.ct-grantt-chart .ct-series-e .ct-point {
+  stroke: #098F56 !important;
+  stroke-width: 6px;
+}
+
+.ct-grantt-chart .ct-series-f .ct-bar,
+.ct-grantt-chart .ct-series-f .ct-line,
+.ct-grantt-chart .ct-series-f .ct-point {
+  stroke: #47C1BF !important;
+  stroke-width: 6px;
+}
+
+.ct-grantt-chart .ct-series-g .ct-bar,
+.ct-grantt-chart .ct-series-g .ct-line,
+.ct-grantt-chart .ct-series-g .ct-point {
+  stroke: #1693EB !important;
+  stroke-width: 6px;
+}
+
+.ct-grantt-chart .ct-series-h .ct-bar,
+.ct-grantt-chart .ct-series-h .ct-line,
+.ct-grantt-chart .ct-series-h .ct-point {
+  stroke: #6474D7 !important;
+  stroke-width: 6px;
+}
+
+.ct-grantt-chart .ct-series-i .ct-bar,
+.ct-grantt-chart .ct-series-i .ct-line,
+.ct-grantt-chart .ct-series-i .ct-point {
+  stroke: #9C6ADE !important;
+  stroke-width: 6px;
+}
+
+.ct-grantt-chart .ct-series-j .ct-bar,
+.ct-grantt-chart .ct-series-j .ct-line,
+.ct-grantt-chart .ct-series-j .ct-point {
+  stroke: #E471DE !important;
+  stroke-width: 6px;
+}
+

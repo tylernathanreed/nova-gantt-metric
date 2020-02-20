@@ -11,13 +11,27 @@ $colors: (
 	'j': #E471DE,
 );
 
-@each $series, $color in $colors {
+.ct-grantt-chart {
 
-	.ct-grantt-chart .ct-series-#{$series} {
-		.ct-bar, .ct-line, .ct-point {
-			  stroke: $color !important;
-			  stroke-width: 6px;
+	@each $series, $color in $colors {
+
+		.ct-series-#{$series} {
+			.ct-bar, .ct-line, .ct-point {
+				  stroke: $color !important;
+				  stroke-width: 6px;
+			}
 		}
+
+	}
+
+	.ct-label {
+
+		color: var(#{'--80'});
+
+		&.ct-vertical.ct-start {
+			justify-content: flex-start;
+		}
+
 	}
 
 }

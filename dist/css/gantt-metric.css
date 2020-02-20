@@ -68,3 +68,13 @@
   stroke-width: 6px;
 }
 
+.ct-grantt-chart .ct-label {
+  color: var(--80);
+}
+
+.ct-grantt-chart .ct-label.ct-vertical.ct-start {
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+

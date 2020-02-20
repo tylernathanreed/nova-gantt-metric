@@ -4,7 +4,7 @@
             <h3 class="mr-3 text-base text-80 font-bold">{{ title }}</h3>
 
             <div v-if="helpText" class="absolute pin-r pin-b p-2 z-50">
-                <tooltip trigger="click">
+                <tooltip trigger="hover">
                     <icon
                         type="help"
                         viewBox="0 0 17 17"
@@ -100,9 +100,9 @@ export default {
             axisY: {
                 showGrid: false,
                 showLabel: true,
-                offset: 100,
+                offset: 120,
                 labelOffset: {
-                    x: 0,
+                    x: 25,
                     y: 5
                 },
                 low: 1,
@@ -135,8 +135,6 @@ export default {
         }
 
         this.chartist = new Chartist.Line(this.$refs.chart, this.chartData, this.options)
-
-        window.gantt = this.chartist
     },
 
     methods: {
@@ -154,30 +152,6 @@ export default {
         handleChange(event) {
             this.$emit('selected', event.target.value)
         },
-    },
-
-    computed: {
-        isNullValue() {
-            return this.value == null
-        },
-
-        formattedValue() {
-            if (!this.isNullValue) {
-                const value = numbro(new String(this.value)).format(this.format)
-
-                return `${this.prefix}${value}`
-            }
-
-            return ''
-        },
-
-        formattedSuffix() {
-            if (this.suffixInflection === false) {
-                return this.suffix
-            }
-
-            return SingularOrPlural(this.value, this.suffix)
-        },
-    },
+    }
 }
 </script>

@@ -49881,9 +49881,9 @@ Object.values(__WEBPACK_IMPORTED_MODULE_1_numbro_dist_languages_min___default.a)
                 axisY: {
                     showGrid: false,
                     showLabel: true,
-                    offset: 100,
+                    offset: 120,
                     labelOffset: {
-                        x: 0,
+                        x: 25,
                         y: 5
                     },
                     low: 1,
@@ -49917,8 +49917,6 @@ Object.values(__WEBPACK_IMPORTED_MODULE_1_numbro_dist_languages_min___default.a)
         }
 
         this.chartist = new __WEBPACK_IMPORTED_MODULE_3_chartist___default.a.Line(this.$refs.chart, this.chartData, this.options);
-
-        window.gantt = this.chartist;
     },
 
 
@@ -49938,28 +49936,6 @@ Object.values(__WEBPACK_IMPORTED_MODULE_1_numbro_dist_languages_min___default.a)
         },
         handleChange: function handleChange(event) {
             this.$emit('selected', event.target.value);
-        }
-    },
-
-    computed: {
-        isNullValue: function isNullValue() {
-            return this.value == null;
-        },
-        formattedValue: function formattedValue() {
-            if (!this.isNullValue) {
-                var value = __WEBPACK_IMPORTED_MODULE_0_numbro___default()(new String(this.value)).format(this.format);
-
-                return '' + this.prefix + value;
-            }
-
-            return '';
-        },
-        formattedSuffix: function formattedSuffix() {
-            if (this.suffixInflection === false) {
-                return this.suffix;
-            }
-
-            return Object(__WEBPACK_IMPORTED_MODULE_6_laravel_nova__["SingularOrPlural"])(this.value, this.suffix);
         }
     }
 });
@@ -50431,7 +50407,7 @@ var render = function() {
               [
                 _c(
                   "tooltip",
-                  { attrs: { trigger: "click" } },
+                  { attrs: { trigger: "hover" } },
                   [
                     _c("icon", {
                       staticClass: "cursor-pointer text-60 -mb-1",

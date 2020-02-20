@@ -1,27 +1,7 @@
-$colors: (
-	'a': #F5573B,
-	'b': #F99037,
-	'c': #F2CB22,
-	'd': #8FC15D,
-	'e': #098F56,
-	'f': #47C1BF,
-	'g': #1693EB,
-	'h': #6474D7,
-	'i': #9C6ADE,
-	'j': #E471DE,
-);
-
 .ct-grantt-chart {
 
-	@each $series, $color in $colors {
-
-		.ct-series-#{$series} {
-			.ct-bar, .ct-line, .ct-point {
-				  stroke: $color !important;
-				  stroke-width: 6px;
-			}
-		}
-
+	.ct-bar, .ct-line, .ct-point {
+		stroke-width: 6px;
 	}
 
 	.ct-label {

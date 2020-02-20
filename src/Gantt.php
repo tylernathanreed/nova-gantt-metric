@@ -180,38 +180,29 @@ abstract class Gantt extends RangedMetric
                 ->get()
                 ->keyBy('label');
 
-        $results = $results->mapWithKeys(function ($result) use ($request, $unit, $timezone, $startingDate, $endingDate) {
-            return [
-                $result->label => [
-                    'start' => $this->formatAggregateResultDate($result->start_aggregate, $unit, $request->twelveHourTime === 'true'),
-                    'end' => $this->formatAggregateResultDate($result->end_aggregate, $unit, $request->twelveHourTime === 'true'),
-                    'range' => $this->getAllPossibleDateResults( $startingDate->max(new Chronos($result->start_aggregate)),
-                        $endingDate->min(new Chronos($result->end_aggregate)),
-                        $unit,
-                        $timezone,
-                        $request->twelveHourTime === 'true'
-                    )
-                ]
-            ];
-        })->all();
+        $index = count($results) + 1;
 
-        $series = [];
-        $index = count($results);
+        $results = $results->mapWithKeys(function ($result) use ($request, $unit, $timezone, $startingDate, $endingDate, $possibleDateResults, &$index) {
 
-        foreach($results as $label => $result) {
+            $range = $this->getAllPossibleDateResults(
+                $startingDate->max(new Chronos($result->start_aggregate)),
+                $endingDate->min(new Chronos($result->end_aggregate)),
+                $unit,
+                $timezone,
+                $request->twelveHourTime === 'true'
+            );
 
-            $data = [];
-
-            foreach($possibleDateResults as $date) {
-                $data[] = ['meta' => $date, 'value' => in_array($date, $result['range']) ? $index : null];
-            }
-
-            $series[] = $data;
             $index--;
 
-        }
+            return [
+                $result->label => collect($possibleDateResults)->mapWithKeys(function($date) use ($range, $index) {
+                    return [$date => in_array($date, $range) ? $index : null];
+                })->all()
+            ];
 
-        return $this->result()->labels($possibleDateResults)->series($series)->ticks(array_keys($results));
+        })->all();
+
+        return $this->result($results);
     }
 
     /**

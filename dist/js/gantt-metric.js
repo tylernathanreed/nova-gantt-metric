@@ -50565,140 +50565,135 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'GanttMetric',
+    name: 'GanttMetric',
 
-  mixins: [__WEBPACK_IMPORTED_MODULE_1_laravel_nova__["InteractsWithDates"]],
+    mixins: [__WEBPACK_IMPORTED_MODULE_1_laravel_nova__["InteractsWithDates"]],
 
-  components: {
-    BaseGanttMetric: __WEBPACK_IMPORTED_MODULE_2__Base_GanttMetric___default.a
-  },
-
-  props: {
-    card: {
-      type: Object,
-      required: true
+    components: {
+        BaseGanttMetric: __WEBPACK_IMPORTED_MODULE_2__Base_GanttMetric___default.a
     },
 
-    resourceName: {
-      type: String,
-      default: ''
-    },
+    props: {
+        card: {
+            type: Object,
+            required: true
+        },
 
-    resourceId: {
-      type: [Number, String],
-      default: ''
-    },
+        resourceName: {
+            type: String,
+            default: ''
+        },
 
-    lens: {
-      type: String,
-      default: ''
-    }
-  },
+        resourceId: {
+            type: [Number, String],
+            default: ''
+        },
 
-  data: function data() {
-    return {
-      loading: true,
-      value: '',
-      data: [],
-      format: '(0[.]00a)',
-      prefix: '',
-      suffix: '',
-      suffixInflection: true,
-      selectedRangeKey: null
-    };
-  },
-
-  watch: {
-    resourceId: function resourceId() {
-      this.fetch();
-    }
-  },
-
-  created: function created() {
-    var _this = this;
-
-    if (this.hasRanges) {
-      this.selectedRangeKey = this.card.ranges[0].value;
-    }
-
-    if (this.card.refreshWhenActionRuns) {
-      Nova.$on('action-executed', function () {
-        return _this.fetch();
-      });
-    }
-  },
-  mounted: function mounted() {
-    this.fetch();
-  },
-
-
-  methods: {
-    handleRangeSelected: function handleRangeSelected(key) {
-      this.selectedRangeKey = key;
-      this.fetch();
-    },
-    fetch: function fetch() {
-      var _this2 = this;
-
-      this.loading = true;
-
-      Object(__WEBPACK_IMPORTED_MODULE_1_laravel_nova__["Minimum"])(Nova.request().get(this.metricEndpoint, this.metricPayload)).then(function (_ref) {
-        var _ref$data$value = _ref.data.value,
-            labels = _ref$data$value.labels,
-            series = _ref$data$value.series,
-            ticks = _ref$data$value.ticks;
-
-        _this2.labels = labels;
-        _this2.data = {
-          labels: labels,
-          series: series,
-          ticks: ticks
-          /*
-          labels: Object.keys(trend),
-          series: [
-            _.map(trend, (value, label) => {
-              return {
-                meta: label,
-                value: value,
-              }
-            }),
-          ],
-          */
-        };
-        _this2.loading = false;
-      });
-    }
-  },
-
-  computed: {
-    hasRanges: function hasRanges() {
-      return this.card.ranges.length > 0;
-    },
-    metricPayload: function metricPayload() {
-      var payload = {
-        params: {
-          timezone: this.userTimezone,
-          twelveHourTime: this.usesTwelveHourTime
+        lens: {
+            type: String,
+            default: ''
         }
-      };
-
-      if (this.hasRanges) {
-        payload.params.range = this.selectedRangeKey;
-      }
-
-      return payload;
     },
-    metricEndpoint: function metricEndpoint() {
-      var lens = this.lens !== '' ? '/lens/' + this.lens : '';
-      if (this.resourceName && this.resourceId) {
-        return '/nova-api/' + this.resourceName + lens + '/' + this.resourceId + '/metrics/' + this.card.uriKey;
-      } else if (this.resourceName) {
-        return '/nova-api/' + this.resourceName + lens + '/metrics/' + this.card.uriKey;
-      } else {
-        return '/nova-api/metrics/' + this.card.uriKey;
-      }
+
+    data: function data() {
+        return {
+            loading: true,
+            value: '',
+            data: [],
+            format: '(0[.]00a)',
+            prefix: '',
+            suffix: '',
+            suffixInflection: true,
+            selectedRangeKey: null
+        };
+    },
+
+    watch: {
+        resourceId: function resourceId() {
+            this.fetch();
+        }
+    },
+
+    created: function created() {
+        var _this = this;
+
+        if (this.hasRanges) {
+            this.selectedRangeKey = this.card.ranges[0].value;
+        }
+
+        if (this.card.refreshWhenActionRuns) {
+            Nova.$on('action-executed', function () {
+                return _this.fetch();
+            });
+        }
+    },
+    mounted: function mounted() {
+        this.fetch();
+    },
+
+
+    methods: {
+        handleRangeSelected: function handleRangeSelected(key) {
+            this.selectedRangeKey = key;
+            this.fetch();
+        },
+        fetch: function fetch() {
+            var _this2 = this;
+
+            this.loading = true;
+
+            Object(__WEBPACK_IMPORTED_MODULE_1_laravel_nova__["Minimum"])(Nova.request().get(this.metricEndpoint, this.metricPayload)).then(function (_ref) {
+                var values = _ref.data.value.values;
+
+                _this2.data = {
+                    labels: Object.keys(values[0].value),
+                    values: values,
+                    series: __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.map(values, function (value) {
+                        return __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.map(value.value, function (value, date) {
+                            return {
+                                meta: date,
+                                value: value
+                            };
+                        });
+                    }),
+                    ticks: __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.map(values, function (value) {
+                        return value.label;
+                    })
+                };
+                _this2.loading = false;
+            });
+        }
+    },
+
+    computed: {
+        hasRanges: function hasRanges() {
+            return this.card.ranges.length > 0;
+        },
+        metricPayload: function metricPayload() {
+            var payload = {
+                params: {
+                    timezone: this.userTimezone,
+                    twelveHourTime: this.usesTwelveHourTime
+                }
+            };
+
+            if (this.hasRanges) {
+                payload.params.range = this.selectedRangeKey;
+            }
+
+            return payload;
+        },
+        metricEndpoint: function metricEndpoint() {
+            var lens = this.lens !== '' ? '/lens/' + this.lens : '';
+            if (this.resourceName && this.resourceId) {
+                return '/nova-api/' + this.resourceName + lens + '/' + this.resourceId + '/metrics/' + this.card.uriKey;
+            } else if (this.resourceName) {
+                return '/nova-api/' + this.resourceName + lens + '/metrics/' + this.card.uriKey;
+            } else {
+                return '/nova-api/metrics/' + this.card.uriKey;
+            }
+        }
     }
-  }
 });
 
 /***/ }),

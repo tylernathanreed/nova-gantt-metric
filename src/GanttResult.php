@@ -7,66 +7,30 @@ use JsonSerializable;
 class GanttResult implements JsonSerializable
 {
     /**
-     * The date labels of the result.
+     * The value of the result.
      *
      * @var array
      */
-    public $labels = [];
+    public $value = [];
 
     /**
-     * The series data of the result.
+     * The custom series colors.
      *
      * @var array
      */
-    public $series = [];
+    public $colors = [];
 
     /**
-     * The tick data of the result.
+     * Create a new gantt result instance.
      *
-     * @var array
+     * @param  string|null  $value
+     *
+     * @return void
      */
-    public $ticks = [];
-
-    /**
-     * Set the date labels for this metric.
-     *
-     * @param  array  $labels
-     *
-     * @return $this
-     */
-    public function labels(array $labels)
+    public function __construct($value = null)
     {
-        $this->labels = $labels;
-
-        return $this;
-    }
-
-    /**
-     * Set the series data for this metric.
-     *
-     * @param  array  $series
-     *
-     * @return $this
-     */
-    public function series(array $series)
-    {
-        $this->series = $series;
-
-        return $this;
-    }
-
-    /**
-     * Set the tick data for this metric.
-     *
-     * @param  array  $ticks
-     *
-     * @return $this
-     */
-    public function ticks(array $ticks)
-    {
-        $this->ticks = $ticks;
-
-        return $this;
+        $this->value = $value;
+        $this->colors = new GanttColors();
     }
 
     /**
@@ -77,9 +41,13 @@ class GanttResult implements JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'labels' => $this->labels,
-            'series' => $this->series,
-            'ticks' => $this->ticks
+            'values' => collect($this->value ?? [])->map(function($value, $label) {
+                return [
+                    'color' => $this->colors->get($label),
+                    'label' => $label,
+                    'value' => $value
+                ];
+            })->values()->all()
         ];
     }
 }

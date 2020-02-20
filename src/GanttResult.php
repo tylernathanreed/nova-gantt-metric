@@ -2,6 +2,7 @@
 
 namespace Reedware\NovaGanttMetric;
 
+use Closure;
 use JsonSerializable;
 
 class GanttResult implements JsonSerializable
@@ -31,6 +32,22 @@ class GanttResult implements JsonSerializable
     {
         $this->value = $value;
         $this->colors = new GanttColors();
+    }
+
+    /**
+     * Format the labels for the gantt result.
+     *
+     * @param  \Closure  $callback
+     *
+     * @return $this
+     */
+    public function label(Closure $callback)
+    {
+        $this->value = collect($this->value)->mapWithKeys(function ($value, $label) use ($callback) {
+            return [$callback($label) => $value];
+        })->all();
+
+        return $this;
     }
 
     /**

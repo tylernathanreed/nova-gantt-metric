@@ -49834,6 +49834,10 @@ Object.values(__WEBPACK_IMPORTED_MODULE_1_numbro_dist_languages_min___default.a)
 
 
 
+var colorForIndex = function colorForIndex(index) {
+    return ['#F5573B', '#F99037', '#F2CB22', '#8FC15D', '#098F56', '#47C1BF', '#1693EB', '#6474D7', '#9C6ADE', '#E471DE'][index];
+};
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'BaseGanttMetric',
 
@@ -49917,6 +49921,14 @@ Object.values(__WEBPACK_IMPORTED_MODULE_1_numbro_dist_languages_min___default.a)
         }
 
         this.chartist = new __WEBPACK_IMPORTED_MODULE_3_chartist___default.a.Line(this.$refs.chart, this.chartData, this.options);
+
+        this.chartist.on('draw', function (context) {
+            if (context.type === 'point' || context.type === 'line') {
+                context.element.attr({
+                    style: 'stroke: ' + context.series.color + ' !important'
+                });
+            }
+        });
     },
 
 
@@ -49932,10 +49944,48 @@ Object.values(__WEBPACK_IMPORTED_MODULE_1_numbro_dist_languages_min___default.a)
                 return _this.chartData.ticks[_this.chartData.series.length - index - 1] || value;
             };
 
-            this.chartist.update(this.chartData, this.options);
+            this.chartist.update(this.formattedChartData, this.options);
+        },
+        getItemColor: function getItemColor(item, index) {
+            return typeof item.color === 'string' ? item.color : colorForIndex(index);
         },
         handleChange: function handleChange(event) {
             this.$emit('selected', event.target.value);
+        }
+    },
+
+    computed: {
+        formattedChartData: function formattedChartData() {
+            var _this2 = this;
+
+            return {
+                labels: this.chartData.labels,
+                values: this.chartData.values,
+                series: __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.map(this.chartData.series, function (series, index) {
+
+                    var meta = 'N/A';
+                    var values = series.value;
+                    var range = values.filter(function (value) {
+                        return value.value != null;
+                    });
+
+                    if (range.length > 0) {
+
+                        var start = range.shift().meta;
+                        var end = range.length > 0 ? range.pop().meta : start;
+                        var limit = values[values.length - 1].meta;
+
+                        meta = start + ' to ' + end + (end == limit ? '+' : '');
+                    }
+
+                    return {
+                        meta: meta,
+                        value: values,
+                        color: _this2.getItemColor(series, index)
+                    };
+                }),
+                ticks: this.chartData.ticks
+            };
         }
     }
 });
@@ -50648,13 +50698,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this2.data = {
                     labels: Object.keys(values[0].value),
                     values: values,
-                    series: __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.map(values, function (value) {
-                        return __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.map(value.value, function (value, date) {
-                            return {
-                                meta: date,
-                                value: value
-                            };
-                        });
+                    series: __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.map(values, function (series) {
+                        return {
+                            color: series.color,
+                            value: __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.map(series.value, function (value, date) {
+                                return {
+                                    meta: date,
+                                    value: value
+                                };
+                            })
+                        };
                     }),
                     ticks: __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.map(values, function (value) {
                         return value.label;

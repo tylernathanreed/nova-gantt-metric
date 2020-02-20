@@ -56,6 +56,19 @@ import 'chartist/dist/chartist.min.css'
 import { SingularOrPlural } from 'laravel-nova'
 import 'chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css'
 
+const colorForIndex = index => [
+    '#F5573B',
+    '#F99037',
+    '#F2CB22',
+    '#8FC15D',
+    '#098F56',
+    '#47C1BF',
+    '#1693EB',
+    '#6474D7',
+    '#9C6ADE',
+    '#E471DE',
+][index]
+
 export default {
     name: 'BaseGanttMetric',
 
@@ -135,6 +148,14 @@ export default {
         }
 
         this.chartist = new Chartist.Line(this.$refs.chart, this.chartData, this.options)
+
+        this.chartist.on('draw', context => {
+            if(context.type === 'point' || context.type === 'line') {
+                context.element.attr({
+                    style: `stroke: ${context.series.color} !important`
+                })
+            }
+        })
     },
 
     methods: {
@@ -146,12 +167,53 @@ export default {
                 return this.chartData.ticks[this.chartData.series.length - index - 1] || value
             }
 
-            this.chartist.update(this.chartData, this.options)
+            this.chartist.update(this.formattedChartData, this.options)
+        },
+
+        getItemColor(item, index) {
+            return typeof item.color === 'string' ? item.color : colorForIndex(index)
         },
 
         handleChange(event) {
             this.$emit('selected', event.target.value)
         },
+    },
+
+    computed: {
+
+        formattedChartData() {
+
+            return {
+                labels: this.chartData.labels,
+                values: this.chartData.values,
+                series: _.map(this.chartData.series, (series, index) => {
+
+                    let meta = 'N/A'
+                    let values = series.value
+                    let range = values.filter((value) => value.value != null)
+
+                    if(range.length > 0) {
+
+                        let start = range.shift().meta
+                        let end = range.length > 0 ? range.pop().meta : start
+                        let limit = values[values.length - 1].meta
+
+                        meta = start + ' to ' + end + (end == limit ? '+' : '')
+
+                    }
+
+                    return {
+                        meta: meta,
+                        value: values,
+                        color: this.getItemColor(series, index)
+                    }
+
+                }),
+                ticks: this.chartData.ticks
+            };
+
+        }
+
     }
 }
 </script>

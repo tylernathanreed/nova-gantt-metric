@@ -31,11 +31,11 @@ class GanttResult implements JsonSerializable
     public function __construct($value = null)
     {
         $this->value = $value;
-        $this->colors = new GanttColors();
+        $this->colors = new GanttColors;
     }
 
     /**
-     * Format the labels for the gantt result.
+     * Formats the labels for the gantt result.
      *
      * @param  \Closure  $callback
      *
@@ -46,6 +46,20 @@ class GanttResult implements JsonSerializable
         $this->value = collect($this->value)->mapWithKeys(function ($value, $label) use ($callback) {
             return [$callback($label) => $value];
         })->all();
+
+        return $this;
+    }
+
+    /**
+     * Sets the custom series colors.
+     *
+     * @param  array  $colors
+     *
+     * @return $this
+     */
+    public function colors(array $colors)
+    {
+        $this->colors = new GanttColors($colors);
 
         return $this;
     }

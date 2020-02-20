@@ -103,13 +103,16 @@ export default {
                     this.data = {
                         labels: Object.keys(values[0].value),
                         values: values,
-                        series: _.map(values, (value) => {
-                            return _.map(value.value, (value, date) => {
-                                return {
-                                    meta: date,
-                                    value: value
-                                }
-                            })
+                        series: _.map(values, (series) => {
+                            return {
+                                color: series.color,
+                                value: _.map(series.value, (value, date) => {
+                                    return {
+                                        meta: date,
+                                        value: value
+                                    }
+                                })
+                            }
                         }),
                         ticks: _.map(values, (value) => { return value.label })
                     }

@@ -10,7 +10,7 @@ This package implements a new type of metric, being specifically for showing hig
 
 Here's some examples of the metric being used in the wild:
 
-(WIP)
+![Tasks](https://github.com/tylernathanreed/nova-gantt-metric/blob/master/docs/example-tasks.png)
 
 ## Installation
 
